@@ -25,7 +25,7 @@ channel.basic_publish(exchange='', routing_key='hello', body=msg)
 ```
 
 ```python
-# amqp_01_consumer.py
+# amqp_01_consumer1.py
 # consumer code
 import pika
 
@@ -44,5 +44,41 @@ channel.start_consuming()
 ![demo_01](https://github.com/clydeatuic/MessageQueue/blob/master/demo_01.gif)
 
 * Fanout Exchange
+
+```python
+# amqp_02_producer.py
+# producer code
+import pika, time
+
+url = '[your AMQP instance URL here]'
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
+channel = connection.channel()
+
+for i in range(1, 6):
+	msg = '%d: Hello UICians!' %(i)
+	channel.basic_publish(exchange='', routing_key='hello', body=msg)
+	time.sleep(1)
+```
+
+```python
+# amqp_02_consumer1.py and amqp_02_consumer2.py
+# consumers code
+import pika
+
+url = '[your AMQP instance URL here]'
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
+channel = connection.channel()
+channel.queue_declare(queue='hello')
+
+def callback (ch, method, properties, body):
+	print " [x] Received %r" %(body)
+
+channel.basic_consume(callback, queue='hello', no_ack=True)			
+channel.start_consuming()
+```
+![demo_02](https://github.com/clydeatuic/MessageQueue/blob/master/demo_02.gif)
+
 * Direct Exchange
 * Topic Exchange
