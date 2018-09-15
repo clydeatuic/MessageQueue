@@ -8,13 +8,14 @@ Advance Message Queueing Protocol
 2. Install pika ```> pip install pika```
 3. Create [AMQP account](https://www.cloudamqp.com/) and copy AMQP instance [URL](https://customer.cloudamqp.com/instance)
 
-### Executing Sample Codes
+### Demo Codes
 * Default Exchange
 ```python
+# amqp_01_producer.py
 # producer code
 import pika
 
-url = [your AMQP instance URL here]
+url = '[your AMQP instance URL here]'
 params = pika.URLParameters(url)
 connection = pika.BlockingConnection(params)
 channel = connection.channel()
@@ -22,6 +23,26 @@ channel = connection.channel()
 msg = 'Hello UICians!'
 channel.basic_publish(exchange='', routing_key='hello', body=msg)
 ```
+
+```python
+# amqp_01_consumer.py
+# consumer code
+
+import pika
+
+url = '[your AMQP instance URL here]'
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
+channel = connection.channel()
+channel.queue_declare(queue='hello')
+
+def callback (ch, method, properties, body):
+	print " [x] Received %r" %(body)
+
+channel.basic_consume(callback, queue='hello', no_ack=True)			
+channel.start_consuming()
+```
+
 * Fanout Exchange
 * Direct Exchange
 * Topic Exchange
