@@ -27,7 +27,6 @@ channel.basic_publish(exchange='', routing_key='hello', body=msg)
 ```python
 # amqp_01_consumer.py
 # consumer code
-
 import pika
 
 url = '[your AMQP instance URL here]'
@@ -42,6 +41,7 @@ def callback (ch, method, properties, body):
 channel.basic_consume(callback, queue='hello', no_ack=True)			
 channel.start_consuming()
 ```
+![demo_01](https://github.com/clydeatuic/MessageQueue/blob/master/demo_01.gif)
 
 * Fanout Exchange
 * Direct Exchange
