@@ -10,6 +10,18 @@ Advance Message Queueing Protocol
 
 ### Executing Sample Codes
 * Default Exchange
+```python
+# producer code
+import pika
+
+url = [your AMQP instance URL here]
+params = pika.URLParameters(url)
+connection = pika.BlockingConnection(params)
+channel = connection.channel()
+
+msg = 'Hello UICians!'
+channel.basic_publish(exchange='', routing_key='hello', body=msg)
+```
 * Fanout Exchange
 * Direct Exchange
 * Topic Exchange
